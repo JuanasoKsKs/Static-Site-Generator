@@ -16,9 +16,19 @@ class TestLeafNode(unittest.TestCase):
             value="Default",
             props={"src": "url/of/Camille.jpg", "alt":  "Poster de Camille",}
         )
-        print("passsssssssssssssssssssssss")
         self.assertEqual('<img src="url/of/Camille.jpg" alt="Poster de Camille" />', node.to_html())
 
     def test_leaf_to_html(self):
-            node = LeafNode("b", "this is bold")
-            self.assertEqual(node.to_html(), "<b>this is bold</b>")
+        node = LeafNode("b", "this is bold")
+        self.assertEqual(node.to_html(), "<b>this is bold</b>")
+
+    def test_leaf_tohtml_notag(self):
+        node = LeafNode(None, "empty")
+        self.assertEqual("empty", node.to_html())
+
+    def test_leaf_has_children_None(self):
+        node = LeafNode("c", "this is invented")
+        self.assertEqual(node.children, None)
+
+if __name__ == "__main__":
+    unittest.main()
