@@ -1,6 +1,6 @@
 import unittest
 
-from textnode import TextNode, TextType
+from textnode import TextNode, TextType, text_node_to_html_node
 
 
 class TestTextNode(unittest.TestCase):
@@ -32,9 +32,29 @@ class TestTextNode(unittest.TestCase):
     def test_repr(self):
         node = TextNode("This is a text node", TextType.TEXT, "https://www.boot.dev")
         self.assertEqual(
-            "TextNode(This is a text node, Text, https://www.boot.dev)", repr(node)
+            "TextNode(This is a text node, None, https://www.boot.dev)", repr(node)
         )
+    
+    #===========Test Text to HTML Nodes ==========
+    #=============================================
+    def test_text(self):
+        node = TextNode("This is a text node", TextType.TEXT)
+        html_node = text_node_to_html_node(node)
+        self.assertEqual(html_node.tag, None)
+        self.assertEqual(html_node.value, "This is a text node")
 
+    def test_image(self):
+        node = TextNode("imagen de jax", TextType.IMAGE, "www.jax.com/jpg")
+        html_node = text_node_to_html_node(node)
+        self.assertEqual(html_node.__repr__(), "LeafNode(img, img, {'src': 'www.jax.com/jpg', 'alt': 'imagen de jax'})")
+        self.assertEqual(html_node.to_html(), '<img src="www.jax.com/jpg" alt="imagen de jax" />')
+    
+    def test_link(self):
+        node = TextNode("link a la victoria", TextType.LINK, "www.victory.com")
+        html_node = text_node_to_html_node(node)
+        self.assertEqual(html_node.__repr__(), "LeafNode(a, link a la victoria, {'href': 'www.victory.com'})")
+        self.assertEqual(html_node.to_html(),'<a href="www.victory.com">link a la victoria</a>')
+        
 
 if __name__ == "__main__":
     unittest.main() 
