@@ -1,5 +1,7 @@
-from textnode import TextNode, TextType
+from textnode import TextNode, TextType, text_node_to_html_node
 import re
+from blocktype import block_to_block_type, BlockType
+from htmlnode import LeafNode, ParentNode
 
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
@@ -80,7 +82,6 @@ def text_to_textnodes(text):
     return nodes
 
 def markdown_to_blocks(markdown):
-    
     markdown = markdown.strip("\n")
     blocks = markdown.split("\n\n")
     final_blocks = []
@@ -90,4 +91,48 @@ def markdown_to_blocks(markdown):
         if block != "":
             final_blocks.append(block)
     return final_blocks
+
+def markdown_to_html_node(markdown):
+    first_borns = []
+    blocks = markdown_to_blocks(markdown)
+    for block in blocks:
+        type_of_block = block_to_block_type(block)
+        childrens_html = text_to_children(block, type_of_block)
+        first_borns.extend(childrens_html)
+    return ParentNode("div", first_borns)
+
+    
+def text_to_children(text, type_of_block):
+    nodes = []
+    if type_of_block == BlockType.HEADING:
+        headings = text.split("\n")
+        for heading in headings:
+            line = heading.split("# ")
+            nodes.append(LeafNode(f"{type_of_block.value}{len(line[0]) +1}", line[1]))
+
+    elif type_of_block == BlockType.ORDERED_LIST or type_of_block == BlockType.UNORDERED_LIST:
+        lines = text.split("\n")
+        parent_node = ParentNode(type_of_block.value, [])
+        for line in lines:
+            divided_line = line.split(" ", 1)
+            parent_node.children.append(LeafNode("li", divided_line[1]))
+        nodes.append(parent_node)
+
+    elif type_of_block == BlockType.QUOTE:
+        nodes.append(LeafNode(type_of_block.value), text.replace("- ", ""))
+
+    elif type_of_block == BlockType.CODE:
+        nodes.append(LeafNode("code", text.replace("```", "")))
+
+    else:
+        text_nodes = text_to_textnodes(text)
+        childrens_in_leaf = []
+        for text_node in text_nodes:
+            childrens_in_leaf.append(text_node_to_html_node(text_node))
+        nodes.append(ParentNode("p", childrens_in_leaf))
+    return nodes
+    
+
+
+          
 
