@@ -119,7 +119,7 @@ def text_to_children(text, type_of_block):
         nodes.append(parent_node)
 
     elif type_of_block == BlockType.QUOTE:
-        nodes.append(LeafNode(type_of_block.value), text.replace("- ", ""))
+        nodes.append(LeafNode(type_of_block.value, text.replace("> ", "")))
 
     elif type_of_block == BlockType.CODE:
         nodes.append(LeafNode("code", text.replace("```", "")))

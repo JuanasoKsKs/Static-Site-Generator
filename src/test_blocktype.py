@@ -62,4 +62,14 @@ This is another paragraph with _italic_ text and `code` here
         self.assertEqual(html, 
             "<div><p>This is <b>bolded</b> paragraph\ntext in a p\ntag here</p><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
         )
+    def test_quote(self):
+        md = """
+normal text
+
+> quote
+> test
+"""
+        parent = markdown_to_html_node(md)
+        html = parent.to_html()
+        self.assertEqual(html, '<div><p>normal text</p><blockquote>quote\ntest</blockquote></div>')
 
