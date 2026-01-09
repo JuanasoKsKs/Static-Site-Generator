@@ -1,16 +1,18 @@
 import os
 import shutil
-from functions import extract_title, generate_page
+from functions import extract_title, generate_page, generate_page_recursive
 
 def main():
     project_path = os.path.abspath("")
     static_path = os.path.join(project_path, "static")
     public_path = os.path.join(project_path, "public")
-    content_path = os.path.join(project_path, "content/index.md")
+
     template_path = os.path.join(project_path, "template.html")
-    dest_path = os.path.join(project_path, "public/index.html")
+    content_path = os.path.join(project_path, "content")
+    
     copy_to_dic(static_path, public_path)
-    generate_page(content_path, template_path, dest_path)
+
+    generate_page_recursive(content_path, template_path, public_path)
 
 #this function overwrites/create the "dest" folder
 def copy_to_dic(origin, dest):
