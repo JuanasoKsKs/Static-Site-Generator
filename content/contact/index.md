@@ -1,9 +1,9 @@
-# Contact the Author
+# Autor El Kiskiriskis #LAN
 
 [< Back Home](/)
 
-Give me a call anytime to chat about Tolkien!
+No conozco a Tokien la Neta, puro jugar lol
 
-`555-555-5555`
+`Regalenme una skin andenle no sean malos`
 
 **"Váya márië."**
